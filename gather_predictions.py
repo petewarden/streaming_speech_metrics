@@ -38,7 +38,7 @@ def transcribe_google(audio_data, samplerate, chunk_duration):
   output_list = []
   for response in responses:
     result = response.results[0]
-    end_time = result.result_end_time.ToSeconds() + (result.result_end_time.ToMilliseconds() / 1000.0)
+    end_time = result.result_end_time.ToMilliseconds() / 1000.0
     alternatives = result.alternatives
     output_list.append((alternatives[0].transcript.lower(), end_time))
 

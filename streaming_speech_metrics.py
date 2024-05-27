@@ -60,10 +60,7 @@ def calculate_wal_wsl_wer(reference_timings, prediction_timings, chunk_duration)
     if reference == "":
       continue
     hypothesis = predicted_sentence_before(prediction_timings, current_time)
-    print(reference)
-    print(hypothesis)
     word_states = calculate_alignment(reference, hypothesis)
-    print(word_states)
     for word_index, word_state in enumerate(word_states):
       previous_stats = prediction_stats[word_index]
       previous_word = previous_stats[0]
@@ -83,16 +80,12 @@ def calculate_wal_wsl_wer(reference_timings, prediction_timings, chunk_duration)
         new_word = current_word
       prediction_stats[word_index] = (new_word, new_appearance, new_stability)
 
-  print(prediction_stats)
-
   found_count = 0
   total_wal = 0.0
   total_wsl = 0.0
   for word_index, reference_timing in enumerate(reference_timings):
     stats = prediction_stats[word_index]
-    reference_word = reference_timing[0]
     reference_time = reference_timing[1]
-    prediction_word = stats[0]
     prediction_appearance = stats[1]
     prediction_stability = stats[2]
     if prediction_appearance is None:

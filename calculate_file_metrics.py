@@ -68,4 +68,4 @@ if __name__ == '__main__':
   mean_wal = wal_total / total_duration
   mean_wsl = wsl_total / total_duration
   mean_wer = wer_total / total_duration
-  print(f"{pred_file_name}: WAL={mean_wal:0.2f}s, WSL={mean_wsl:0.2f}s, WER={mean_wer:0.2f}")
+  print(f"{pred_file_name}: WAL={mean_wal:0.2f}s, WSL={mean_wsl:0.2f}s, WER={mean_wer:0.2f} ({mean_wer * 100:0.2f}%)")

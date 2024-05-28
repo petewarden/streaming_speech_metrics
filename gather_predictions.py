@@ -5,49 +5,8 @@ from pathlib import Path
 import soundfile as sf
 import os
 
-from google.cloud import speech
-
-def transcribe_google(audio_data, samplerate, chunk_duration):
-  """Streams transcription of the given audio file."""
-
-  client = speech.SpeechClient()
-
-  chunk_size = chunk_duration * samplerate
-  chunk_count = int(math.ceil(audio_data.shape[0] / chunk_size))
-  stream = np.array_split(audio_data, chunk_count)
-
-  requests = list(
-    speech.StreamingRecognizeRequest(audio_content=chunk.tobytes()) for chunk in stream
-  )
-
-  config = speech.RecognitionConfig(
-    encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-    sample_rate_hertz=samplerate,
-    language_code="en-US",
-  )
-
-  streaming_config = speech.StreamingRecognitionConfig(
-    config=config, interim_results=True
-  )
-
-  # streaming_recognize returns a generator.
-  responses = client.streaming_recognize(
-    config=streaming_config,
-    requests=requests,
-  )
-
-  output_list = []
-  prefix = ""
-  for response in responses:
-    result = response.results[0]
-    end_time = result.result_end_time.ToMilliseconds() / 1000.0
-    alternatives = result.alternatives
-    prediction = alternatives[0].transcript.lower()
-    output_list.append((prefix + prediction, end_time))
-    if result.is_final:
-      prefix += prediction + " "
-
-  return output_list
+from transcribe_amazon import transcribe_amazon
+from transcribe_google import transcribe_google
 
 def gather_predictions(service, dataset_root, output_path, chunk_duration):
   subfolders = [f.path for f in os.scandir(dataset_root) if f.is_dir()]
@@ -61,7 +20,9 @@ def gather_predictions(service, dataset_root, output_path, chunk_duration):
           file_id = Path(flac_file_name).stem
           print(file_id)
           audio_data, samplerate = sf.read(flac_file_name, dtype="int16")
-          if service == "google":
+          if service == "amazon":
+            transcription_results = transcribe_amazon(audio_data, samplerate, chunk_duration)
+          elif service == "google":
             transcription_results = transcribe_google(audio_data, samplerate, chunk_duration)
           else:
             raise Exception(f"Unknown service {service}")

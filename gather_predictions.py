@@ -1,6 +1,7 @@
 import glob
 import math
 import numpy as np
+from pathlib import Path
 import soundfile as sf
 import os
 
@@ -36,11 +37,15 @@ def transcribe_google(audio_data, samplerate, chunk_duration):
   )
 
   output_list = []
+  prefix = ""
   for response in responses:
     result = response.results[0]
     end_time = result.result_end_time.ToMilliseconds() / 1000.0
     alternatives = result.alternatives
-    output_list.append((alternatives[0].transcript.lower(), end_time))
+    prediction = alternatives[0].transcript.lower()
+    output_list.append((prefix + prediction, end_time))
+    if result.is_final:
+      prefix += prediction + " "
 
   return output_list
 
@@ -53,7 +58,8 @@ def gather_predictions(service, dataset_root, output_path, chunk_duration):
       for subsubfolder in subsubfolders:
         flac_file_names = glob.glob(os.path.join(subsubfolder, "*.flac"))
         for flac_file_name in flac_file_names:
-          print(flac_file_name)
+          file_id = Path(flac_file_name).stem
+          print(file_id)
           audio_data, samplerate = sf.read(flac_file_name, dtype="int16")
           if service == "google":
             transcription_results = transcribe_google(audio_data, samplerate, chunk_duration)

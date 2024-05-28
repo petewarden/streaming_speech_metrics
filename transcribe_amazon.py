@@ -23,8 +23,12 @@ class TranscriptionEventHandler(TranscriptResultStreamHandler):
       return
     result = results[0]
     alt = result.alternatives[0]
-    normalized = alt.transcript.translate(str.maketrans('', '', string.punctuation)).lower()
-    self.output_list.append((normalized, result.end_time))
+    normalized_partial = alt.transcript.translate(str.maketrans('', '', string.punctuation)).lower()
+    normalized_full = self.prefix + normalized_partial
+    self.output_list.append((normalized_full, result.end_time))
+    if not result.is_partial:
+      self.prefix += normalized_partial + " "
+
 
 async def transcribe_amazon_async(audio_data, samplerate, chunk_duration):
   client = TranscribeStreamingClient(region=REGION)
@@ -46,6 +50,7 @@ async def transcribe_amazon_async(audio_data, samplerate, chunk_duration):
 
   handler = TranscriptionEventHandler(stream.output_stream)
   handler.output_list = []
+  handler.prefix = ""
   await asyncio.gather(write_chunks(), handler.handle_events())
   
   return handler.output_list

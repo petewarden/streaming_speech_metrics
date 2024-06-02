@@ -6,6 +6,7 @@ import soundfile as sf
 import os
 
 from transcribe_amazon import transcribe_amazon
+from transcribe_coqui import transcribe_coqui
 from transcribe_google import transcribe_google
 from transcribe_whisper import transcribe_whisper
 
@@ -42,6 +43,8 @@ def gather_predictions(service, dataset_root, output_path, chunk_duration):
           ref_timings = ref_timings_by_file[file_id]
           if service == "amazon":
             transcription_results = transcribe_amazon(audio_data, samplerate, chunk_duration, ref_timings)
+          elif service == "coqui":
+            transcription_results = transcribe_coqui(audio_data, samplerate, chunk_duration, ref_timings)
           elif service == "google":
             transcription_results = transcribe_google(audio_data, samplerate, chunk_duration, ref_timings)
           elif service == "whisper":

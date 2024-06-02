@@ -55,7 +55,7 @@ async def transcribe_amazon_async(audio_data, samplerate, chunk_duration):
   
   return handler.output_list
 
-def transcribe_amazon(audio_data, samplerate, chunk_duration):
+def transcribe_amazon(audio_data, samplerate, chunk_duration, _):
   return asyncio.run(transcribe_amazon_async(audio_data, samplerate, chunk_duration))
 
 if __name__ == '__main__':
@@ -66,5 +66,5 @@ if __name__ == '__main__':
   chunk_duration = 0.1
   flac_file_name = "data/LibriSpeech/test-clean/61/70970/61-70970-0040.flac"
   audio_data, samplerate = sf.read(flac_file_name, dtype="int16")
-  transcription_results = transcribe_amazon(audio_data, samplerate, chunk_duration)
+  transcription_results = transcribe_amazon(audio_data, samplerate, chunk_duration, None)
   print(transcription_results)

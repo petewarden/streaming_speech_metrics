@@ -1,6 +1,6 @@
 from google.cloud import speech
 
-def transcribe_google(audio_data, samplerate, chunk_duration):
+def transcribe_google(audio_data, samplerate, chunk_duration, _):
   """Streams transcription of the given audio file."""
 
   client = speech.SpeechClient()
@@ -50,5 +50,5 @@ if __name__ == '__main__':
   chunk_duration = 0.1
   flac_file_name = "data/LibriSpeech/test-clean/61/70970/61-70970-0040.flac"
   audio_data, samplerate = sf.read(flac_file_name, dtype="int16")
-  transcription_results = transcribe_google(audio_data, samplerate, chunk_duration)
+  transcription_results = transcribe_google(audio_data, samplerate, chunk_duration, None)
   print(transcription_results)

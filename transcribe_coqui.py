@@ -48,7 +48,6 @@ def transcribe_coqui(audio_data, samplerate, chunk_duration, _):
     previous_results = intermediate_results
 
   output_list.append((coqui_model.stt(audio_data), end_time))
-  print(output_list)
   return output_list
 
 if __name__ == "__main__":

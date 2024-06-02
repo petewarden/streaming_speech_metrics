@@ -162,3 +162,4 @@ cython_debug/
 *.tar.gz
 *.zip
 /data/LibriSpeech
+/cache

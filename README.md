@@ -10,3 +10,5 @@ Python library for analyzing the latency and accuracy of streaming speech to tex
 `python calculate_file_metrics.py data/LibriSpeech/test-clean data/google_transcriptions.tsv`
 
 `data/google_transcriptions.tsv: WAL=1.52s, WSL=1.60s, WER=0.07 (6.77%)`
+
+`python -m pip install aiofile amazon_transcribe google-cloud-speech whisper`

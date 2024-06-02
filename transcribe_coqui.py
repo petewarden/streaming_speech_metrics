@@ -37,14 +37,19 @@ def transcribe_coqui(audio_data, samplerate, chunk_duration, _):
 
   output_list = []
   stream = coqui_model.createStream()
+  previous_results = ""
   for chunk_index, chunk in enumerate(chunks):
     end_time = chunk_index * chunk_duration + (chunk.shape[0] / samplerate) 
     stream.feedAudioContent(chunk)
     intermediate_results = stream.intermediateDecode()
+    if intermediate_results == previous_results:
+      continue
     output_list.append((intermediate_results, end_time))
+    previous_results = intermediate_results
 
   output_list.append((coqui_model.stt(audio_data), end_time))
   print(output_list)
+  return output_list
 
 if __name__ == "__main__":
     main()

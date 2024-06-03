@@ -15,6 +15,10 @@ Python library for analyzing the latency and accuracy of streaming speech to tex
 
 `data/transcriptions/whisper.tsv: WAL=2.13s, WSL=2.20s, WER=0.05 (5.06%)`
 
+`python calculate_file_metrics.py data/LibriSpeech/test-clean data/transcriptions/coqui.tsv`
+
+`data/transcriptions/coqui.tsv: WAL=1.30s, WSL=1.44s, WER=0.07 (7.10%)`
+
 sudo apt install -y git
 curl https://pyenv.run | bash
 echo 'export PYENV_ROOT="$HOME/.pyenv"

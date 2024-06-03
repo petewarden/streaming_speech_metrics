@@ -2,6 +2,8 @@ from jiwer import process_words, wer
 
 import math
 
+from utils import reference_words_before, predicted_sentence_before
+
 def calculate_alignment(reference, hypothesis):
 
   process_result = process_words(reference, hypothesis)
@@ -28,22 +30,6 @@ def calculate_alignment(reference, hypothesis):
         word_states[ref_idx] = (ref_word, "missing", None)
 
   return word_states
-
-def reference_words_before(reference_timings, time_cutoff):
-  result = []
-  for word, word_end_time in reference_timings:
-    if word_end_time > time_cutoff:
-      break
-    result.append(word)
-  return " ".join(result)
-
-def predicted_sentence_before(prediction_timings, time_cutoff):
-  result = ""
-  for sentence, word_end_time in prediction_timings:
-    if word_end_time > time_cutoff:
-      break
-    result = sentence
-  return result
 
 def calculate_wal_wsl_wer(reference_timings, prediction_timings, chunk_duration):
 
